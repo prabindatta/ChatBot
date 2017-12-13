@@ -13,6 +13,9 @@
         <array key="Baskerville.ttc">
             <string>Baskerville</string>
         </array>
+        <array key="Zapfino.ttf">
+            <string>Zapfino</string>
+        </array>
     </customFonts>
     <scenes>
         <!--Login-->
@@ -128,14 +131,23 @@
                                     <constraint firstAttribute="width" constant="60" id="sKw-VJ-Nzd"/>
                                 </constraints>
                             </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="@Developed By : Prabin K Datta" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rYf-7g-kEG">
+                                <rect key="frame" x="49" y="609.5" width="276" height="37.5"/>
+                                <fontDescription key="fontDescription" name="Zapfino" family="Zapfino" pointSize="11"/>
+                                <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="zUD-aN-vlr" firstAttribute="top" secondItem="ura-39-pzq" secondAttribute="bottom" constant="50" id="1LK-wG-YPD"/>
+                            <constraint firstItem="rYf-7g-kEG" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="49" id="Agn-qh-2BC"/>
                             <constraint firstItem="B4e-hR-dHw" firstAttribute="top" secondItem="zUD-aN-vlr" secondAttribute="bottom" constant="57" id="LVF-Uj-Lv7"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="rYf-7g-kEG" secondAttribute="bottom" constant="20" id="XGi-Ul-EJm"/>
                             <constraint firstItem="ura-39-pzq" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="XiL-nz-td0"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="zUD-aN-vlr" secondAttribute="trailing" constant="16" id="f5a-UA-efd"/>
                             <constraint firstItem="B4e-hR-dHw" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="kVJ-8E-1YY"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="rYf-7g-kEG" secondAttribute="trailing" constant="50" id="qy2-IU-EMs"/>
                             <constraint firstItem="ura-39-pzq" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="10" id="sAy-7S-RDE"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="B4e-hR-dHw" secondAttribute="trailing" constant="16" id="uSL-ZM-n3Z"/>
                             <constraint firstItem="zUD-aN-vlr" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="uUo-X0-cWQ"/>

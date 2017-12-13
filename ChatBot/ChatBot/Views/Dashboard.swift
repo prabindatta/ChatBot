@@ -14,6 +14,7 @@ class Dashboard: UIViewController, ChatBotCustomPopoverDelegate {
     @IBOutlet weak var m_chatBotBtn: UIButton!
     @IBOutlet weak var m_chatBotView: UIView!
     @IBOutlet var m_chatBotNotificationView: UIView!
+    var chatbots: Array<ChatBot>?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -69,13 +70,8 @@ class Dashboard: UIViewController, ChatBotCustomPopoverDelegate {
         }
         
         UIView.animate(withDuration: 0.9, delay: 0.0, options: [.curveLinear,.repeat, .autoreverse], animations: { () -> Void in
-//            UIView.setAnimationRepeatCount(2)
-//            self.m_chatBotBtn.layer.transform = CATransform3DMakeRotation(CGFloat.pi, 1, 0, 0)
-//            self.m_chatBotNotificationView.isHidden = false
             self.m_chatBotImg.transform = CGAffineTransform(scaleX: 0,y: 0)
             self.m_chatBotImg.transform = CGAffineTransform(scaleX: -1,y: 1)
-            
-
         }) { (finished) -> Void in
 //            self.rotateView()
         }
@@ -86,55 +82,78 @@ class Dashboard: UIViewController, ChatBotCustomPopoverDelegate {
     }
     
     @IBAction func didTapChatBotBtn(_ sender: Any) {
-        let dialog = AZDialogViewController(title: "ChatBot", message: "Do you need any help?")
+        
+        Client.chatBot().getChatBotList(begin: { () -> Void in
+//            if !self.isCurrentViewActive() {
+//                self.fetching = false
+//                return
+//            }
+        }, success: { (result) -> Void in
+            objc_sync_enter(self)
+            self.chatbots = result.items
+            objc_sync_exit(self)
+
+            DispatchQueue.main.async {
+                self.showDialog(true, self.chatbots![0])
+            }
+            
+        }, error: { (statusCode, errorResponse) -> Void in
+//            if !self.isCurrentViewActive() {
+//                self.fetching = false
+//                return
+//            }
+//
+//            self.m_TableView.reloadData()
+        }, complete: { () -> Void in
+            // Leave Empty
+        })
+    }
+    
+    func showDialog(_ loopDialop: Bool, _ data: ChatBot) {
+        let dialog = AZDialogViewController(title: "ChatBot", message: data.chatbotQues)
         dialog.dismissDirection = .bottom
         dialog.dismissWithOutsideTouch = true
         dialog.showSeparator = false
         dialog.separatorColor = UIColor.blue
         dialog.allowDragGesture = false
-        
+
         dialog.imageHandler = { (imageView) in
             imageView.image = UIImage(named: "chatbot")
             imageView.contentMode = .scaleAspectFill
             return true //must return true, otherwise image won't show.
         }
         
-        dialog.addAction(AZDialogAction(title: "Help 1") { (dialog) -> (Void) in
-            //add your actions here.
-            dialog.dismiss()
-        })
-        
-        dialog.addAction(AZDialogAction(title: "Help 2") { (dialog) -> (Void) in
-            //add your actions here.
-            dialog.dismiss()
-        })
-        
-        dialog.addAction(AZDialogAction(title: "Help 3") { (dialog) -> (Void) in
-            //add your actions here.
-            dialog.dismiss()
-        })
-        
-        dialog.addAction(AZDialogAction(title: "Help 4") { (dialog) -> (Void) in
-            //add your actions here.
-            dialog.dismiss()
-        })
-        
-        dialog.addAction(AZDialogAction(title: "Help 5") { (dialog) -> (Void) in
-            //add your actions here.
-            dialog.dismiss()
-        })
+        for answer_data in data.chatbotAnswers {
+            dialog.addAction(AZDialogAction(title: answer_data.answer) { (dialog) -> (Void) in
+                //add your actions here.
+                dialog.dismiss(animated: true, completion: {
+                    if answer_data.childCode != 0 {
+                        let index = self.findIndex(child: answer_data.childCode)
+                        self.showDialog(false, self.chatbots![index])
+                    }
+                })
+                
+            })
+        }
         
         dialog.cancelEnabled = true
         dialog.cancelButtonStyle = { (button,height) in
-//            button.tintColor = self.primaryColor
+            //            button.tintColor = self.primaryColor
             button.setTitle("CANCEL", for: [])
             return true //must return true, otherwise cancel button won't show.
         }
         
         dialog.show(in: self)
-
     }
     
+    func findIndex(child: NSInteger) -> NSInteger {
+        for (index, value) in self.chatbots!.enumerated() {
+            if value.chatbotCode == child {
+                return index
+            }
+        }
+        return 0
+    }
     
     //MARK: ChatBotCustomPopoverDelegate
     func popoverPresentationControllerShouldDismissPopover(popoverPresentationController: UIPopoverPresentationController) -> Bool {
